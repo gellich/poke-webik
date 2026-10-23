@@ -1,0 +1,4 @@
+import { WEATHER_LOCATION as loc } from '../config.js';
+export async function getWeather(signal){const u=new URL('https://api.open-meteo.com/v1/forecast');for(const [k,v] of Object.entries({latitude:loc.latitude,longitude:loc.longitude,current:'temperature_2m,weather_code,is_day',timezone:loc.timezone}))u.searchParams.set(k,v);const r=await fetch(u,{signal});if(!r.ok)throw Error('HTTP_'+r.status);const data=await r.json();if(!data.current||!Number.isFinite(data.current.temperature_2m))throw Error('INVALID_DATA');return data.current}
+export function kind(c){if(c>=95)return 'storm';if([71,73,75,77,85,86].includes(c))return 'snow';if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(c))return 'rain';if([1,2,3,45,48].includes(c))return 'cloud';return 'sun'}
+export const candidates={sun:653,cloud:133,rain:7,snow:471,storm:25};export const icons={sun:'☀️',cloud:'☁️',rain:'🌧️',snow:'❄️',storm:'⛈️'};
